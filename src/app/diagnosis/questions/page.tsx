@@ -69,6 +69,7 @@ export default function DiagnosisQuestionsPage() {
           </p>
 
           <RadioGroup
+            key={currentQuestion.id}
             className="mt-8 gap-3"
             value={selectedValue !== undefined ? String(selectedValue) : undefined}
             onValueChange={handleSelect}
