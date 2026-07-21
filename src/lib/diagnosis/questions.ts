@@ -6,10 +6,10 @@ import type { AnswerOption, Question } from "./types";
  * scoring.tsの反転ロジックとの整合性を保つ。
  */
 export const ANSWER_OPTIONS: AnswerOption[] = [
-  { value: 4, label: "できている" },
-  { value: 3, label: "どちらかといえば できている" },
-  { value: 2, label: "どちらかといえば できていない" },
-  { value: 1, label: "できていない" },
+  { value: 4, label: "完璧に出来ている" },
+  { value: 3, label: "出来ている" },
+  { value: 2, label: "どちらかといえば出来ていない" },
+  { value: 1, label: "出来ていない" },
 ];
 
 /**

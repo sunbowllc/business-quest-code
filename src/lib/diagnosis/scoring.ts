@@ -82,9 +82,6 @@ export function buildDiagnosisResult(answers: Answers): DiagnosisResult {
     priorityLevel: getPriorityLevel(score.normalizedScore),
     text: CATEGORY_CONTENT[score.categoryId].priorityAction,
   }));
-  const selfImprovementHints = sortedByGrowthRoom.map(
-    (score) => CATEGORY_CONTENT[score.categoryId].hint,
-  );
 
   return {
     answers,
@@ -94,6 +91,5 @@ export function buildDiagnosisResult(answers: Answers): DiagnosisResult {
     strengths,
     weaknesses,
     priorityActions,
-    selfImprovementHints,
   };
 }

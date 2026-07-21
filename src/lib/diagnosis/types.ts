@@ -64,5 +64,4 @@ export interface DiagnosisResult {
   strengths: string[];
   weaknesses: string[];
   priorityActions: PriorityAction[];
-  selfImprovementHints: string[];
 }

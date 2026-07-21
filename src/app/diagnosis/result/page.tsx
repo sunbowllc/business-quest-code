@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
-  Lightbulb,
   MessageCircleHeart,
   RotateCcw,
   Sparkles,
@@ -72,9 +71,9 @@ export default function DiagnosisResultPage() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-10 sm:px-6">
       <div className="text-center">
-        <p className="text-sm text-muted-foreground">診断お疲れさまでした。</p>
+        <p className="text-sm font-bold text-foreground">事業の現在地</p>
         <p className="mx-auto mt-2 max-w-xl text-sm leading-7 text-muted-foreground">
-          この診断では、あなたの事業運営の現在地をもとに、強み・弱み・優先的に見直すべき改善ポイントを整理しています。
+          強み・弱み・優先的に見直すべき改善ポイントを整理しました。
         </p>
       </div>
 
@@ -110,7 +109,7 @@ export default function DiagnosisResultPage() {
               <span className="text-lg font-medium text-muted-foreground"> / 100</span>
             </p>
             <p className="mt-2 max-w-[12rem] text-xs text-muted-foreground">
-              スコアが高いほど、改善の伸びしろが大きいことを示します
+              スコアが高い部分ほど、改善のした際の伸びしろが大きい
             </p>
           </div>
           <div className="w-full min-w-0 flex-1">
@@ -225,56 +224,28 @@ export default function DiagnosisResultPage() {
         </div>
       </div>
 
-      <Card className="mt-4">
-        <CardContent className="p-5">
+      <Card className="mt-8 border-amber-300 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10">
+        <CardContent className="flex flex-col items-center gap-3 p-6 text-center sm:p-8">
           <h3 className="flex items-center gap-1.5 text-sm font-bold">
-            <Lightbulb className="h-4 w-4" />
-            自分で改善する場合のヒント
+            <MessageCircleHeart className="h-4 w-4" />
+            サポートが必要な方へ
           </h3>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            {result.selfImprovementHints.map((item, index) => (
-              <li key={index} className="flex gap-2">
-                <span className="text-primary">・</span>
-                {item}
-              </li>
-            ))}
-          </ul>
+          <p className="max-w-lg text-sm leading-7 text-muted-foreground">
+            何から始めればいいかわからない、自分の商品・集客・セールスのどこを整理すべきか壁打ちしたい、
+            伴走サポートを検討したい方は、無料相談をご活用ください。
+          </p>
+          <Button
+            size="lg"
+            className="h-12 w-full max-w-xs bg-amber-500 px-8 text-base text-white hover:bg-amber-600"
+            render={
+              <a href={CONSULTATION_LINE_URL} target="_blank" rel="noopener noreferrer">
+                無料で相談する
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            }
+          />
         </CardContent>
       </Card>
-
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Card className="border-dashed">
-          <CardContent className="flex h-full flex-col gap-2 p-6">
-            <h3 className="text-sm font-bold">自分で改善を進める方へ</h3>
-            <p className="flex-1 text-sm leading-7 text-muted-foreground">
-              上の「優先改善ポイント」と「改善ヒント」をもとに、まずは1つだけ試してみてください。
-              小さな一歩の積み重ねが、事業全体の伸びしろを埋めていきます。
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border-amber-300 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10">
-          <CardContent className="flex h-full flex-col items-center gap-3 p-6 text-center">
-            <h3 className="flex items-center gap-1.5 text-sm font-bold">
-              <MessageCircleHeart className="h-4 w-4" />
-              サポートが必要な方へ
-            </h3>
-            <p className="flex-1 text-sm leading-7 text-muted-foreground">
-              何から始めればいいかわからない、自分の商品・集客・セールスのどこを整理すべきか壁打ちしたい、
-              伴走サポートを検討したい方は、無料相談をご活用ください。
-            </p>
-            <Button
-              size="lg"
-              className="h-12 w-full bg-amber-500 px-8 text-base text-white hover:bg-amber-600"
-              render={
-                <a href={CONSULTATION_LINE_URL} target="_blank" rel="noopener noreferrer">
-                  無料で相談する
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-              }
-            />
-          </CardContent>
-        </Card>
-      </div>
 
       <div className="mt-8 flex justify-center">
         <Button
