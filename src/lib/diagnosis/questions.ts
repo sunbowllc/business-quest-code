@@ -1,10 +1,10 @@
 import type { AnswerOption, Question } from "./types";
 
 export const ANSWER_OPTIONS: AnswerOption[] = [
-  { value: 1, label: "ほとんど当てはまらない" },
+  { value: 1, label: "当てはまらない" },
   { value: 2, label: "少し当てはまる" },
-  { value: 3, label: "かなり当てはまる" },
-  { value: 4, label: "非常に当てはまる" },
+  { value: 3, label: "当てはまる" },
+  { value: 4, label: "かなり当てはまる" },
 ];
 
 /**
