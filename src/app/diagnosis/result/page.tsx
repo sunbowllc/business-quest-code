@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { CategoryRadarChart } from "@/components/diagnosis/category-radar-chart";
 import { StarRating } from "@/components/diagnosis/star-rating";
 import { CATEGORY_MAP } from "@/lib/diagnosis/categories";
@@ -148,48 +147,6 @@ export default function DiagnosisResultPage() {
                   <p className="mt-3 text-sm leading-6 text-foreground">
                     {action.text}
                   </p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <h2 className="text-base font-bold">
-          6領域別スコア
-          <span className="ml-1 text-xs font-normal text-muted-foreground">
-            （数値が高いほど、改善すると効果的です）
-          </span>
-        </h2>
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {result.categoryScores.map((score) => {
-            const category = CATEGORY_MAP[score.categoryId];
-            const Icon = CATEGORY_ICONS[score.categoryId];
-            const isTop = score.categoryId === topCategoryScore.categoryId;
-            return (
-              <Card
-                key={score.categoryId}
-                className={isTop ? "border-primary/40 bg-primary/5" : undefined}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                        <Icon className="h-3.5 w-3.5" />
-                      </span>
-                      <p className="text-sm font-semibold">{category.shortName}</p>
-                      {isTop && (
-                        <Badge variant="secondary" className="text-[10px]">
-                          重点分野
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-sm font-bold text-primary">
-                      {score.normalizedScore}
-                    </p>
-                  </div>
-                  <Progress value={score.normalizedScore} className="mt-3" />
                 </CardContent>
               </Card>
             );
