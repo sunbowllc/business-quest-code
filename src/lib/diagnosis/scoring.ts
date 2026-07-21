@@ -71,7 +71,7 @@ export function buildDiagnosisResult(answers: Answers): DiagnosisResult {
     (score) => CATEGORY_CONTENT[score.categoryId].weakness,
   );
   const priorityActions = weakestCategories.map(
-    (score) => CATEGORY_CONTENT[score.categoryId].hint,
+    (score) => CATEGORY_CONTENT[score.categoryId].priorityAction,
   );
   const selfImprovementHints = sortedByGrowthRoom.map(
     (score) => CATEGORY_CONTENT[score.categoryId].hint,

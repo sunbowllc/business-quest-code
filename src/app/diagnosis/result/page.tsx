@@ -12,7 +12,7 @@ import { createDefaultAnswers, buildDiagnosisResult } from "@/lib/diagnosis/scor
 import { clearAnswers, getStorageVersion, loadAnswers } from "@/lib/diagnosis/storage";
 import type { Answers } from "@/lib/diagnosis/types";
 
-const CONSULTATION_EMAIL = "design.motoda@gmail.com";
+const CONSULTATION_LINE_URL = "https://line.me/ti/p/WhGDzqxF2T";
 
 function subscribeNoop() {
   return () => {};
@@ -179,9 +179,7 @@ export default function DiagnosisResultPage() {
             size="lg"
             className="h-12 bg-amber-500 px-8 text-base text-white hover:bg-amber-600"
             render={
-              <a
-                href={`mailto:${CONSULTATION_EMAIL}?subject=${encodeURIComponent("Business Quest code 無料相談希望")}`}
-              >
+              <a href={CONSULTATION_LINE_URL} target="_blank" rel="noopener noreferrer">
                 無料で相談する
                 <ArrowRight className="h-4 w-4" />
               </a>
