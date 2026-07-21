@@ -20,7 +20,9 @@ export function createDefaultAnswers(): Answers {
 }
 
 /**
- * 暫定スコアリング。当てはまるほど改善余地（伸びしろ）が大きくなる設計。
+ * 暫定スコアリング。質問は「できている」前提のポジティブな文章なので、
+ * 当てはまるほど状態が良い（＝伸びしろが小さい）。そのため回答値を反転
+ * （5 - 回答値）して合計することで、伸びしろスコアを算出する。
  * 正式なスコアリング設計はIssue 2で精緻化する。
  */
 export function computeCategoryScores(answers: Answers): CategoryScore[] {
@@ -28,10 +30,10 @@ export function computeCategoryScores(answers: Answers): CategoryScore[] {
     const categoryQuestions = QUESTIONS.filter(
       (question) => question.categoryId === category.id,
     );
-    const rawScore = categoryQuestions.reduce(
-      (sum, question) => sum + (answers[question.id] ?? 0),
-      0,
-    );
+    const rawScore = categoryQuestions.reduce((sum, question) => {
+      const value = answers[question.id];
+      return sum + (value ? MAX_ANSWER_VALUE + 1 - value : 0);
+    }, 0);
     const maxScore = categoryQuestions.length * MAX_ANSWER_VALUE;
     const normalizedScore = maxScore > 0 ? Math.round((rawScore / maxScore) * 100) : 0;
 
