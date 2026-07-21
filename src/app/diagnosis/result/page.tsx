@@ -2,12 +2,23 @@
 
 import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { ArrowRight, RotateCcw, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Lightbulb,
+  MessageCircleHeart,
+  RotateCcw,
+  Sparkles,
+  Target,
+  TrendingUp,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { CategoryRadarChart } from "@/components/diagnosis/category-radar-chart";
 import { CATEGORY_MAP } from "@/lib/diagnosis/categories";
+import { CATEGORY_ICONS } from "@/lib/diagnosis/icons";
 import { createDefaultAnswers, buildDiagnosisResult } from "@/lib/diagnosis/scoring";
 import { clearAnswers, getStorageVersion, loadAnswers } from "@/lib/diagnosis/storage";
 import type { Answers } from "@/lib/diagnosis/types";
@@ -51,40 +62,59 @@ export default function DiagnosisResultPage() {
     );
   }
 
+  const topCategoryScore = [...result.categoryScores].sort(
+    (a, b) => b.normalizedScore - a.normalizedScore,
+  )[0];
+  const topCategory = CATEGORY_MAP[topCategoryScore.categoryId];
+  const TopCategoryIcon = CATEGORY_ICONS[topCategoryScore.categoryId];
+
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-10 sm:px-6">
+    <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-10 sm:px-6">
       <div className="text-center">
         <p className="text-sm text-muted-foreground">診断お疲れさまでした。</p>
-        <p className="mt-2 text-sm leading-7 text-muted-foreground">
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-7 text-muted-foreground">
           この診断では、あなたの事業運営の現在地をもとに、強み・弱み・優先的に見直すべき改善ポイントを整理しています。
         </p>
       </div>
 
-      <Card className="mt-8 border-primary/30 bg-primary/5">
-        <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
+      <Card className="mt-8 overflow-hidden border-primary/30 bg-gradient-to-b from-primary/10 to-transparent">
+        <CardContent className="flex flex-col items-center gap-3 p-6 text-center sm:p-8">
           <Badge className="gap-1">
             <Sparkles className="h-3.5 w-3.5" />
             診断結果タイプ
           </Badge>
-          <p className="text-xl font-bold sm:text-2xl">{result.resultType.name}</p>
-          <p className="max-w-md text-sm text-muted-foreground">
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+            <TopCategoryIcon className="h-7 w-7" />
+          </span>
+          <p className="text-2xl font-bold sm:text-3xl">{result.resultType.name}</p>
+          <p className="max-w-lg text-sm text-muted-foreground sm:text-base">
             {result.resultType.description}
+          </p>
+          <p className="mt-1 max-w-lg text-sm font-medium text-primary">
+            特に「{topCategory.shortName}」を伸ばすことが、次の成果に最も直結します。
           </p>
         </CardContent>
       </Card>
 
       <Card className="mt-6">
-        <CardContent className="p-6 text-center">
-          <p className="text-sm font-medium text-muted-foreground">
-            総合スコア（事業成長チャンススコア）
-          </p>
-          <p className="mt-2 text-5xl font-bold tracking-tight text-primary">
-            {result.overallScore}
-            <span className="text-lg font-medium text-muted-foreground"> / 100</span>
-          </p>
-          <p className="mt-2 text-xs text-muted-foreground">
-            スコアが高いほど、改善の伸びしろが大きいことを示します
-          </p>
+        <CardContent className="flex flex-col items-center gap-6 p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8">
+          <div className="shrink-0 text-center">
+            <p className="text-sm font-medium text-muted-foreground">
+              総合スコア
+              <br />
+              （事業成長チャンススコア）
+            </p>
+            <p className="mt-2 text-5xl font-bold tracking-tight text-primary">
+              {result.overallScore}
+              <span className="text-lg font-medium text-muted-foreground"> / 100</span>
+            </p>
+            <p className="mt-2 max-w-[12rem] text-xs text-muted-foreground">
+              スコアが高いほど、改善の伸びしろが大きいことを示します
+            </p>
+          </div>
+          <div className="w-full min-w-0 flex-1">
+            <CategoryRadarChart categoryScores={result.categoryScores} />
+          </div>
         </CardContent>
       </Card>
 
@@ -93,16 +123,31 @@ export default function DiagnosisResultPage() {
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {result.categoryScores.map((score) => {
             const category = CATEGORY_MAP[score.categoryId];
+            const Icon = CATEGORY_ICONS[score.categoryId];
+            const isTop = score.categoryId === topCategoryScore.categoryId;
             return (
-              <Card key={score.categoryId}>
+              <Card
+                key={score.categoryId}
+                className={isTop ? "border-primary/40 bg-primary/5" : undefined}
+              >
                 <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">{category.shortName}</p>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                        <Icon className="h-3.5 w-3.5" />
+                      </span>
+                      <p className="text-sm font-semibold">{category.shortName}</p>
+                      {isTop && (
+                        <Badge variant="secondary" className="text-[10px]">
+                          重点分野
+                        </Badge>
+                      )}
+                    </div>
                     <p className="text-sm font-bold text-primary">
                       {score.normalizedScore}
                     </p>
                   </div>
-                  <Progress value={score.normalizedScore} className="mt-2" />
+                  <Progress value={score.normalizedScore} className="mt-3" />
                 </CardContent>
               </Card>
             );
@@ -113,7 +158,10 @@ export default function DiagnosisResultPage() {
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Card>
           <CardContent className="p-5">
-            <h3 className="text-sm font-bold text-primary">自分の強み</h3>
+            <h3 className="flex items-center gap-1.5 text-sm font-bold text-primary">
+              <CheckCircle2 className="h-4 w-4" />
+              自分の強み
+            </h3>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               {result.strengths.map((item, index) => (
                 <li key={index} className="flex gap-2">
@@ -126,7 +174,10 @@ export default function DiagnosisResultPage() {
         </Card>
         <Card>
           <CardContent className="p-5">
-            <h3 className="text-sm font-bold">自分の弱み</h3>
+            <h3 className="flex items-center gap-1.5 text-sm font-bold">
+              <TrendingUp className="h-4 w-4" />
+              自分の弱み
+            </h3>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               {result.weaknesses.map((item, index) => (
                 <li key={index} className="flex gap-2">
@@ -139,14 +190,22 @@ export default function DiagnosisResultPage() {
         </Card>
       </div>
 
-      <Card className="mt-4">
-        <CardContent className="p-5">
-          <h3 className="text-sm font-bold">優先改善ポイント</h3>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+      <Card className="mt-4 border-primary/30">
+        <CardContent className="p-5 sm:p-6">
+          <h3 className="flex items-center gap-1.5 text-sm font-bold">
+            <Target className="h-4 w-4 text-primary" />
+            優先改善ポイント
+          </h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            まずはここから。今の事業に一番効くアクションです。
+          </p>
+          <ul className="mt-4 space-y-3">
             {result.priorityActions.map((item, index) => (
-              <li key={index} className="flex gap-2">
-                <span className="text-primary">{index + 1}.</span>
-                {item}
+              <li key={index} className="flex gap-3">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                  {index + 1}
+                </span>
+                <span className="text-sm leading-6 text-foreground">{item}</span>
               </li>
             ))}
           </ul>
@@ -155,7 +214,10 @@ export default function DiagnosisResultPage() {
 
       <Card className="mt-4">
         <CardContent className="p-5">
-          <h3 className="text-sm font-bold">自分で改善する場合のヒント</h3>
+          <h3 className="flex items-center gap-1.5 text-sm font-bold">
+            <Lightbulb className="h-4 w-4" />
+            自分で改善する場合のヒント
+          </h3>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
             {result.selfImprovementHints.map((item, index) => (
               <li key={index} className="flex gap-2">
@@ -167,26 +229,39 @@ export default function DiagnosisResultPage() {
         </CardContent>
       </Card>
 
-      <Card className="mt-8 border-amber-300 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10">
-        <CardContent className="flex flex-col items-center gap-4 p-6 text-center">
-          <p className="text-sm leading-7 text-muted-foreground">
-            診断結果を見て、自分で改善を進められそうな方は、ぜひ実践してみてください。
-            <br />
-            一方で、何から始めればいいかわからない、自分の商品・集客・セールスのどこを整理すべきか壁打ちしたい、
-            事業運営の仕組み化を進めたい、伴走サポートを検討したい方は、無料相談をご活用ください。
-          </p>
-          <Button
-            size="lg"
-            className="h-12 bg-amber-500 px-8 text-base text-white hover:bg-amber-600"
-            render={
-              <a href={CONSULTATION_LINE_URL} target="_blank" rel="noopener noreferrer">
-                無料で相談する
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            }
-          />
-        </CardContent>
-      </Card>
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Card className="border-dashed">
+          <CardContent className="flex h-full flex-col gap-2 p-6">
+            <h3 className="text-sm font-bold">自分で改善を進める方へ</h3>
+            <p className="flex-1 text-sm leading-7 text-muted-foreground">
+              上の「優先改善ポイント」と「改善ヒント」をもとに、まずは1つだけ試してみてください。
+              小さな一歩の積み重ねが、事業全体の伸びしろを埋めていきます。
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border-amber-300 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10">
+          <CardContent className="flex h-full flex-col items-center gap-3 p-6 text-center">
+            <h3 className="flex items-center gap-1.5 text-sm font-bold">
+              <MessageCircleHeart className="h-4 w-4" />
+              サポートが必要な方へ
+            </h3>
+            <p className="flex-1 text-sm leading-7 text-muted-foreground">
+              何から始めればいいかわからない、自分の商品・集客・セールスのどこを整理すべきか壁打ちしたい、
+              伴走サポートを検討したい方は、無料相談をご活用ください。
+            </p>
+            <Button
+              size="lg"
+              className="h-12 w-full bg-amber-500 px-8 text-base text-white hover:bg-amber-600"
+              render={
+                <a href={CONSULTATION_LINE_URL} target="_blank" rel="noopener noreferrer">
+                  無料で相談する
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              }
+            />
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="mt-8 flex justify-center">
         <Button

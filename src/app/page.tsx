@@ -1,26 +1,9 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  Compass,
-  Layers,
-  Megaphone,
-  HandCoins,
-  Users,
-  Sparkles,
-  Settings,
-} from "lucide-react";
+import { ArrowRight, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CATEGORIES } from "@/lib/diagnosis/categories";
-
-const CATEGORY_ICONS = {
-  product: Layers,
-  marketing: Megaphone,
-  sales: HandCoins,
-  support: Users,
-  branding: Sparkles,
-  operations: Settings,
-} as const;
+import { CATEGORY_ICONS } from "@/lib/diagnosis/icons";
 
 export default function Home() {
   return (
