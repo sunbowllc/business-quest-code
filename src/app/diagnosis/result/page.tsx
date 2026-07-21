@@ -119,7 +119,46 @@ export default function DiagnosisResultPage() {
       </Card>
 
       <div className="mt-8">
-        <h2 className="text-base font-bold">6領域別スコア</h2>
+        <h3 className="flex items-center gap-1.5 text-sm font-bold">
+          <Target className="h-4 w-4 text-primary" />
+          優先改善ポイント
+        </h3>
+        <p className="mt-1 text-xs text-muted-foreground">
+          ★の数が多いほど優先度が高い項目です。まずはここから。
+        </p>
+        <div className="mt-4 space-y-3">
+          {result.priorityActions.map((action, index) => {
+            const category = CATEGORY_MAP[action.categoryId];
+            const Icon = CATEGORY_ICONS[action.categoryId];
+            return (
+              <Card key={index} className="border-primary/30">
+                <CardContent className="p-4 sm:p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <p className="text-sm font-bold">{category.shortName}</p>
+                    </div>
+                    <StarRating level={action.priorityLevel} />
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-foreground">
+                    {action.text}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-base font-bold">
+          6領域別スコア
+          <span className="ml-1 text-xs font-normal text-muted-foreground">
+            （数値が高いほど、改善すると効果的です）
+          </span>
+        </h2>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {result.categoryScores.map((score) => {
             const category = CATEGORY_MAP[score.categoryId];
@@ -190,49 +229,14 @@ export default function DiagnosisResultPage() {
         </Card>
       </div>
 
-      <div className="mt-4">
-        <h3 className="flex items-center gap-1.5 text-sm font-bold">
-          <Target className="h-4 w-4 text-primary" />
-          優先改善ポイント
-        </h3>
-        <p className="mt-1 text-xs text-muted-foreground">
-          ★の数が多いほど優先度が高い項目です。まずはここから。
-        </p>
-        <div className="mt-4 space-y-3">
-          {result.priorityActions.map((action, index) => {
-            const category = CATEGORY_MAP[action.categoryId];
-            const Icon = CATEGORY_ICONS[action.categoryId];
-            return (
-              <Card key={index} className="border-primary/30">
-                <CardContent className="p-4 sm:p-5">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                        <Icon className="h-4 w-4" />
-                      </span>
-                      <p className="text-sm font-bold">{category.shortName}</p>
-                    </div>
-                    <StarRating level={action.priorityLevel} />
-                  </div>
-                  <p className="mt-3 text-sm leading-6 text-foreground">
-                    {action.text}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
-
       <Card className="mt-8 border-amber-300 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10">
         <CardContent className="flex flex-col items-center gap-3 p-6 text-center sm:p-8">
           <h3 className="flex items-center gap-1.5 text-sm font-bold">
             <MessageCircleHeart className="h-4 w-4" />
-            サポートが必要な方へ
+            現状を相談したい（無料相談 希望）
           </h3>
           <p className="max-w-lg text-sm leading-7 text-muted-foreground">
-            何から始めればいいかわからない、自分の商品・集客・セールスのどこを整理すべきか壁打ちしたい、
-            伴走サポートを検討したい方は、無料相談をご活用ください。
+            自分の商品・集客・セールスのどこを整理すべきか知りたい方は、下記ボタンからご連絡どうぞ。
           </p>
           <Button
             size="lg"

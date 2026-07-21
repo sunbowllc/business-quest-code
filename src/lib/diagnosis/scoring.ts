@@ -69,6 +69,7 @@ export function buildDiagnosisResult(answers: Answers): DiagnosisResult {
     (a, b) => b.normalizedScore - a.normalizedScore,
   );
   const weakestCategories = sortedByGrowthRoom.slice(0, 2);
+  const priorityCategories = sortedByGrowthRoom.slice(0, 3);
   const strongestCategories = [...sortedByGrowthRoom].reverse().slice(0, 2);
 
   const strengths = strongestCategories.map(
@@ -77,7 +78,7 @@ export function buildDiagnosisResult(answers: Answers): DiagnosisResult {
   const weaknesses = weakestCategories.map(
     (score) => CATEGORY_CONTENT[score.categoryId].weakness,
   );
-  const priorityActions = weakestCategories.map((score) => ({
+  const priorityActions = priorityCategories.map((score) => ({
     categoryId: score.categoryId,
     priorityLevel: getPriorityLevel(score.normalizedScore),
     text: CATEGORY_CONTENT[score.categoryId].priorityAction,
