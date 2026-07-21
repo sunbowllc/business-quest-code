@@ -1,10 +1,15 @@
 import type { AnswerOption, Question } from "./types";
 
+/**
+ * 表示順は「できている」→「できていない」。
+ * value自体は変えず（4=最も良い状態, 1=最も改善余地が大きい）、
+ * scoring.tsの反転ロジックとの整合性を保つ。
+ */
 export const ANSWER_OPTIONS: AnswerOption[] = [
-  { value: 1, label: "当てはまらない" },
-  { value: 2, label: "少し当てはまる" },
-  { value: 3, label: "当てはまる" },
-  { value: 4, label: "かなり当てはまる" },
+  { value: 4, label: "できている" },
+  { value: 3, label: "どちらかといえば できている" },
+  { value: 2, label: "どちらかといえば できていない" },
+  { value: 1, label: "できていない" },
 ];
 
 /**

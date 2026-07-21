@@ -11,7 +11,7 @@ export function getPriorityLevel(normalizedScore: number): number {
 
 const MAX_ANSWER_VALUE = 4;
 
-/** 未回答時などのフォールバック用に、全問「少し当てはまる」を入れたデフォルト回答 */
+/** 未回答時などのフォールバック用に、全問「どちらかといえば できていない」を入れたデフォルト回答 */
 export function createDefaultAnswers(): Answers {
   return QUESTIONS.reduce((answers, question) => {
     answers[question.id] = 2;
