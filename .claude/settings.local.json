@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pwd && ls -la /Users/sunbow/Desktop/business-quest-code 2>&1 && echo \"---parent---\" && ls -la /Users/sunbow/Desktop/)",
+      "Bash(gh --version)",
+      "Bash(vercel --version)",
+      "Bash(npm -v)",
+      "Bash(gh auth *)",
+      "Bash(git config *)"
+    ]
+  }
+}
