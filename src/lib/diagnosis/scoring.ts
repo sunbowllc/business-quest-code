@@ -4,6 +4,11 @@ import { QUESTIONS } from "./questions";
 import { RESULT_TYPES } from "./resultTypes";
 import type { Answers, CategoryScore, DiagnosisResult } from "./types";
 
+/** 0-100の伸びしろスコアを1-5段階の優先度（★の数）に変換する */
+export function getPriorityLevel(normalizedScore: number): number {
+  return Math.min(5, Math.max(1, Math.ceil(normalizedScore / 20)));
+}
+
 const MAX_ANSWER_VALUE = 4;
 
 /** 未回答時などのフォールバック用に、全問「少し当てはまる」を入れたデフォルト回答 */
@@ -70,9 +75,11 @@ export function buildDiagnosisResult(answers: Answers): DiagnosisResult {
   const weaknesses = weakestCategories.map(
     (score) => CATEGORY_CONTENT[score.categoryId].weakness,
   );
-  const priorityActions = weakestCategories.map(
-    (score) => CATEGORY_CONTENT[score.categoryId].priorityAction,
-  );
+  const priorityActions = weakestCategories.map((score) => ({
+    categoryId: score.categoryId,
+    priorityLevel: getPriorityLevel(score.normalizedScore),
+    text: CATEGORY_CONTENT[score.categoryId].priorityAction,
+  }));
   const selfImprovementHints = sortedByGrowthRoom.map(
     (score) => CATEGORY_CONTENT[score.categoryId].hint,
   );

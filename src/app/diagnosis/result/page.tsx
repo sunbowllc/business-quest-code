@@ -17,6 +17,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { CategoryRadarChart } from "@/components/diagnosis/category-radar-chart";
+import { StarRating } from "@/components/diagnosis/star-rating";
 import { CATEGORY_MAP } from "@/lib/diagnosis/categories";
 import { CATEGORY_ICONS } from "@/lib/diagnosis/icons";
 import { createDefaultAnswers, buildDiagnosisResult } from "@/lib/diagnosis/scoring";
@@ -190,27 +191,39 @@ export default function DiagnosisResultPage() {
         </Card>
       </div>
 
-      <Card className="mt-4 border-primary/30">
-        <CardContent className="p-5 sm:p-6">
-          <h3 className="flex items-center gap-1.5 text-sm font-bold">
-            <Target className="h-4 w-4 text-primary" />
-            優先改善ポイント
-          </h3>
-          <p className="mt-1 text-xs text-muted-foreground">
-            まずはここから。今の事業に一番効くアクションです。
-          </p>
-          <ul className="mt-4 space-y-3">
-            {result.priorityActions.map((item, index) => (
-              <li key={index} className="flex gap-3">
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-                  {index + 1}
-                </span>
-                <span className="text-sm leading-6 text-foreground">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+      <div className="mt-4">
+        <h3 className="flex items-center gap-1.5 text-sm font-bold">
+          <Target className="h-4 w-4 text-primary" />
+          優先改善ポイント
+        </h3>
+        <p className="mt-1 text-xs text-muted-foreground">
+          ★の数が多いほど優先度が高い項目です。まずはここから。
+        </p>
+        <div className="mt-4 space-y-3">
+          {result.priorityActions.map((action, index) => {
+            const category = CATEGORY_MAP[action.categoryId];
+            const Icon = CATEGORY_ICONS[action.categoryId];
+            return (
+              <Card key={index} className="border-primary/30">
+                <CardContent className="p-4 sm:p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <p className="text-sm font-bold">{category.shortName}</p>
+                    </div>
+                    <StarRating level={action.priorityLevel} />
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-foreground">
+                    {action.text}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
 
       <Card className="mt-4">
         <CardContent className="p-5">

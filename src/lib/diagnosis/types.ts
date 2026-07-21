@@ -49,6 +49,13 @@ export interface ResultTypeMeta {
   description: string;
 }
 
+export interface PriorityAction {
+  categoryId: CategoryId;
+  /** 1-5, higher = more urgent to address first */
+  priorityLevel: number;
+  text: string;
+}
+
 export interface DiagnosisResult {
   answers: Answers;
   overallScore: number;
@@ -56,6 +63,6 @@ export interface DiagnosisResult {
   resultType: ResultTypeMeta;
   strengths: string[];
   weaknesses: string[];
-  priorityActions: string[];
+  priorityActions: PriorityAction[];
   selfImprovementHints: string[];
 }

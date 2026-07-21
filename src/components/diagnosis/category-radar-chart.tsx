@@ -1,5 +1,6 @@
 "use client";
 
+import type { SVGProps } from "react";
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -14,6 +15,25 @@ import type { CategoryScore } from "@/lib/diagnosis/types";
 
 const CHART_COLOR = "#4f46e5";
 
+interface AngleTickProps extends SVGProps<SVGTextElement> {
+  payload?: { value: string };
+}
+
+function AngleTick({ x, y, textAnchor, payload }: AngleTickProps) {
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={textAnchor}
+      fill="var(--foreground)"
+      fontSize={11}
+      dy={4}
+    >
+      {payload?.value}
+    </text>
+  );
+}
+
 export function CategoryRadarChart({
   categoryScores,
 }: {
@@ -25,14 +45,15 @@ export function CategoryRadarChart({
   }));
 
   return (
-    <div className="h-[320px] w-full sm:h-[360px]">
+    <div className="h-[280px] w-full sm:h-[340px]">
       <ResponsiveContainer width="100%" height="100%">
-        <RadarChart data={data} margin={{ top: 12, right: 24, bottom: 12, left: 24 }}>
+        <RadarChart
+          data={data}
+          outerRadius="58%"
+          margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
+        >
           <PolarGrid stroke="var(--border)" />
-          <PolarAngleAxis
-            dataKey="category"
-            tick={{ fill: "var(--foreground)", fontSize: 12 }}
-          />
+          <PolarAngleAxis dataKey="category" tick={<AngleTick />} />
           <PolarRadiusAxis
             angle={90}
             domain={[0, 100]}
