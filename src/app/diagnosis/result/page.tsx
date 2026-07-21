@@ -120,7 +120,7 @@ export default function DiagnosisResultPage() {
 
       <div className="mt-8">
         <h3 className="flex items-center gap-1.5 text-sm font-bold">
-          <Target className="h-4 w-4 text-primary" />
+          <Target className="h-4 w-4 text-pink-600 dark:text-pink-400" />
           優先改善ポイント
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">
@@ -131,11 +131,14 @@ export default function DiagnosisResultPage() {
             const category = CATEGORY_MAP[action.categoryId];
             const Icon = CATEGORY_ICONS[action.categoryId];
             return (
-              <Card key={index} className="border-primary/30">
+              <Card
+                key={index}
+                className="border-pink-300 bg-pink-50/60 dark:border-pink-500/30 dark:bg-pink-500/10"
+              >
                 <CardContent className="p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-pink-600 text-white">
                         <Icon className="h-4 w-4" />
                       </span>
                       <p className="text-sm font-bold">{category.shortName}</p>
